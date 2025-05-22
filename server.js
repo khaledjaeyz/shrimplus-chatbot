@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
@@ -17,7 +16,7 @@ app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-    const completion = await openai.createChatCompletion({
+    const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         {
@@ -29,7 +28,7 @@ app.post('/chat', async (req, res) => {
       ],
     });
 
-    const reply = completion.data.choices[0].message.content;
+    const reply = completion.choices[0].message.content;
     res.json({ reply });
   } catch (err) {
     console.error(err);
@@ -38,5 +37,5 @@ app.post('/chat', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Shrimplus chatbot running on http://localhost:${port}`);
+  console.log(`✅ Shrimplus chatbot running on http://localhost:${port}`);
 });
