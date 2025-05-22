@@ -1,3 +1,2 @@
-module.exports = {
-  OPENAI_API_KEY: 'your-api-key-here'
-};
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
